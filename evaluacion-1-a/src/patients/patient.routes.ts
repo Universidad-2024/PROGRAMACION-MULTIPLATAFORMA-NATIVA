@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { PatientService } from './patient.service';
 import { PatientController } from './patient.controller';
+import { patientMiddleware } from '../middleware/createPatient.middleware';
 
 export class PatientRoutes {
 
@@ -8,12 +9,12 @@ export class PatientRoutes {
         
         const router = Router();
         const patientService = new PatientService();
-        const controller = new PatientController(patientService);
+        const patientController = new PatientController(patientService);
 
-        // router.get('/');
+        router.get('/', patientController.findAll);
         // router.get('/search');
         // router.get('/:id');
-        router.post('/', controller.createPatient);
+        router.post("/", patientMiddleware.create, patientController.create);
         // router.put('/:id');
         // router.delete('/:id');
 

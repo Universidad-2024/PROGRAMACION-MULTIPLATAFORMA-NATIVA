@@ -13,10 +13,12 @@ export class CreatePatientDto {
 
     public static create(object: CreatePatientDto): [string?, CreatePatientDto?] {
         const { rut, name, age, gender, personal_photo, disease } = object;
-        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp'];
 
         const rutRegex = /^[0-9]{7,8}-[0-9Kk]$/;
-        const extension = personal_photo.mimetype.split('/')[1];
+        if (!personal_photo) return ['personal_photo is required'];
+            const extension = personal_photo.mimetype.split('/')[1];
+        if (!imageExtensions.includes(extension)) return ['personal_photo is invalid format, must be jpg, jpeg, png, gif, bmp, webp'];
         
         if (!rut) return ['rut is required'];
         if (!rutRegex.test(rut)) return ['rut is invalid format XXXXXXXX-X']; 
@@ -25,7 +27,6 @@ export class CreatePatientDto {
         if (!gender) return ['gender is required'];
         if (!Object.values(Gender).includes(gender)) return ['gender is invalid, must be Masculino or Femenino'];
         if (!personal_photo) return ['File personal_photo is required'];
-        if (!imageExtensions.includes(extension)) return ['personal_photo must be an image'];
         if (!disease) return ['disease is required'];
 
 
