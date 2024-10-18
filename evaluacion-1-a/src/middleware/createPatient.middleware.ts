@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { CreatePatientDto } from "../patients/dtos/create-patient.dto";
-import { CustomError } from "../config/custom.error";
-import { Gender } from "../interfaces";
 
 export const patientMiddleware = {
   create: (req: Request, res: Response, next: NextFunction) => {
