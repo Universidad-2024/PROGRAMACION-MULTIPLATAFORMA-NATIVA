@@ -13,7 +13,7 @@ export class PatientRoutes {
 
         router.get('/', patientController.findAll);
         // router.get('/search');
-        // router.get('/:id');
+        router.get('/:id', patientMiddleware.mongooseId , patientController.findOneById);
         router.post("/", patientMiddleware.create, patientController.create);
         // router.put('/:id');
         // router.delete('/:id');

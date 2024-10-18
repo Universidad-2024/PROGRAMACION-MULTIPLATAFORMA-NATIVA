@@ -22,6 +22,20 @@ export class PatientService {
     };
   }
 
+  public async findOneById(id: string) {
+    const patient = await PatientModel.findById(id);
+
+    if (!patient) {
+      throw CustomError.notFound("Patient not found");
+    }
+
+    const patientEntity = PatientEntity.fromObject(patient);
+
+    return {
+      patient: patientEntity,
+    };
+  }
+
   public async create(patientDto: CreatePatientDto) {
     let personal_photo = "";
 

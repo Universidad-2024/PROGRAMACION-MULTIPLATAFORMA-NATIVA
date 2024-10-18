@@ -13,6 +13,13 @@ export class PatientController {
     return res.status(500).json({ error: "Internal server error" });
   };
 
+  public findOneById = (req: Request, res: Response) => {
+    this.patientService
+      .findOneById(req.params.id)
+      .then((patient) => res.status(200).json(patient))
+      .catch((error) => this.handleError(error, res));
+  }
+
   public findAll = (req: Request, res: Response) => {
     this.patientService
       .findAll()
