@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { PatientEntity } from "../../patients/entities/patient.entity";
 
 const PatientSchema = new Schema({
     rut: {
@@ -19,7 +20,6 @@ const PatientSchema = new Schema({
     },
     personal_photo: {
         type: String,
-        required: true
     },
     admission_date: {
         type: Date,

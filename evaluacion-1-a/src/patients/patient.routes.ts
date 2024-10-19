@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { PatientService } from './patient.service';
 import { PatientController } from './patient.controller';
-import { patientMiddleware } from '../middleware/createPatient.middleware';
+import { patientMiddleware } from '../middleware/patient.middleware';
 
 export class PatientRoutes {
 
@@ -12,12 +12,12 @@ export class PatientRoutes {
         const patientController = new PatientController(patientService);
 
         router.get('/', patientController.findAll);
-        // router.get('/search');
+        router.get('/search', patientController.findBySearch);
         router.get('/:id', patientMiddleware.mongooseId , patientController.findOneById);
         router.post("/", patientMiddleware.create, patientController.create);
-        // router.put('/:id');
-        // router.delete('/:id');
+        router.put('/:id', [ patientMiddleware.mongooseId,  patientMiddleware.update ], patientController.update);
+        router.delete('/:id', patientMiddleware.mongooseId, patientController.delete);
 
-        return router; // Add this line to return the router
+        return router;
     }
 }

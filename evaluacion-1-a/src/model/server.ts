@@ -1,38 +1,35 @@
-import express, { Router } from 'express';
-import cors from 'cors';
-import fileUpload from 'express-fileupload';
-
+import express, { Router } from "express";
+import cors from "cors";
+import fileUpload from "express-fileupload";
 
 interface Options {
-    port: number;
-    routes: Router;
+  port: number;
+  routes: Router;
 }
 
 export class Server {
-    public readonly app = express();
-    private readonly port: number;
-    private readonly routes: Router;
+  public readonly app = express();
+  private readonly port: number;
+  private readonly routes: Router;
 
-    public constructor(options: Options) {
-        const { port, routes } = options;
-        this.port = port;
-        this.routes = routes;
-    }
+  public constructor(options: Options) {
+    const { port, routes } = options;
+    this.port = port;
+    this.routes = routes;
+  }
 
-    async start() {
+  async start() {
+    this.app.use(cors());
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(
+      fileUpload()
+    );
 
-        this.app.use( cors() );
-        this.app.use( express.json() );
-        this.app.use( express.urlencoded({ extended: true }) );
-        this.app.use(fileUpload({
-            limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
-        }))
+    this.app.use(this.routes);
 
-        this.app.use(this.routes);
-
-
-        this.app.listen(this.port, () => {
-            console.log(`Server running on port ${this.port}`);
-        });
-    }
+    this.app.listen(this.port, () => {
+      console.log(`Server running on port ${this.port}`);
+    });
+  }
 }

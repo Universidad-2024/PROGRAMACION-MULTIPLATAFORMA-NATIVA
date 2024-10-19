@@ -20,6 +20,13 @@ export class PatientController {
       .catch((error) => this.handleError(error, res));
   }
 
+  public findBySearch = (req: Request, res: Response) => {
+    this.patientService
+      .findBySearch(req.query.search as string)
+      .then((patients) => res.status(200).json(patients))
+      .catch((error) => this.handleError(error, res));
+  }
+
   public findAll = (req: Request, res: Response) => {
     this.patientService
       .findAll()
@@ -29,9 +36,28 @@ export class PatientController {
 
   public create = (req: Request, res: Response) => {
     this.patientService
-      .create(req.body)
+      .create({
+        ...req.body,
+        ...req?.files
+      })
       .then((patient) => res.status(201).json(patient))
       .catch((error) => this.handleError(error, res));
   };
 
+  public update = (req: Request, res: Response) => {
+    this.patientService
+      .update(req.params.id, {
+        ...req.body,
+        ...req?.files
+      })
+      .then((patient) => res.status(200).json(patient))
+      .catch((error) => this.handleError(error, res));
+  };
+
+  public delete = (req: Request, res: Response) => {
+    this.patientService
+      .delete(req.params.id)
+      .then((resp) => res.status(200).json(resp))
+      .catch((error) => this.handleError(error, res));
+  };
 }

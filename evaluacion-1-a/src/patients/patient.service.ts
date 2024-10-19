@@ -5,7 +5,8 @@ import { UploadedFile } from "express-fileupload";
 import { CustomError } from "../config/custom.error";
 import { PatientModel } from "../database/model/patient.model";
 import { CreatePatientDto } from "./dtos/create-patient.dto";
-import { PatientEntity } from "./entities/patient.entity";
+import { UpdatePatientDto } from "./dtos/update-patient.dto";
+import { FolderPath } from "../interfaces";
 
 export class PatientService {
   public constructor() {}
@@ -13,12 +14,8 @@ export class PatientService {
   public async findAll() {
     const patients = await PatientModel.find();
 
-    const patientsEntities = patients.map((patient) =>
-      PatientEntity.fromObject(patient)
-    );
-
     return {
-        patients: patientsEntities,
+      patients: patients,
     };
   }
 
@@ -29,21 +26,44 @@ export class PatientService {
       throw CustomError.notFound("Patient not found");
     }
 
-    const patientEntity = PatientEntity.fromObject(patient);
+    return {
+      patient: patient,
+    };
+  }
+
+  public async findBySearch(search: string | Date) {
+    if (!search) {
+      throw CustomError.badRequest("Search parameter is required");
+    }
+
+    const isDate = !isNaN(new Date(search).getTime());
+    const patients = await PatientModel.find({
+      $or: [
+        { admission_date: isDate ? new Date(search) : undefined },
+        { disease: { $regex: search, $options: "i" } },
+        { gender: { $regex: search, $options: "i" } },
+      ],
+    });
+
+    if (patients.length === 0) {
+      throw CustomError.notFound("Patients not found");
+    }
 
     return {
-      patient: patientEntity,
+      patients: patients,
     };
   }
 
   public async create(patientDto: CreatePatientDto) {
-    let personal_photo = "";
+    let personal_photo = null;
 
     try {
-      personal_photo = await this.saveFile(
-        patientDto.personal_photo,
-        "personal_photos"
-      );
+      if (patientDto.personal_photo) {
+        personal_photo = await this.saveFile(
+          patientDto.personal_photo,
+          FolderPath.PERSONAL_PHOTOS
+        );
+      }
 
       const patient = new PatientModel({
         ...patientDto,
@@ -52,28 +72,76 @@ export class PatientService {
 
       const savedPatient = await patient.save();
 
-      const patientEntity = PatientEntity.fromObject(savedPatient);
-
       return {
-        patient: patientEntity,
+        patient: savedPatient,
       };
     } catch (error) {
-      this.deleteFile(
-        path.resolve(__dirname, "../uploads/personal_photos", personal_photo)
-      );
+      if (personal_photo) {
+        this.deleteFile({
+          fileName: personal_photo,
+          folderPath: FolderPath.PERSONAL_PHOTOS,
+        });
+      }
       throw CustomError.internalErrorServer(`${error}`);
     }
   }
 
-  private async saveFile(file: UploadedFile, folderPath: string) {
+  public async update(id: string, patientDto: UpdatePatientDto) {
+    let personal_photo = null;
+
+    const data = await this.findOneById(id);
+
+    if (!!patientDto.personal_photo && !!data.patient.personal_photo) {
+      this.deleteFile({
+        fileName: data.patient.personal_photo,
+        folderPath: FolderPath.PERSONAL_PHOTOS,
+      });
+    }
+
+    if (patientDto.personal_photo) {
+      personal_photo = await this.saveFile(
+        patientDto.personal_photo,
+        FolderPath.PERSONAL_PHOTOS
+      );
+    }
+
+    const updatedPatient = await PatientModel.findByIdAndUpdate(
+      id,
+      { ...patientDto, personal_photo: personal_photo || data.patient.personal_photo },
+      { new: true }
+    );
+
+    if (!updatedPatient) {
+      throw CustomError.notFound("Patient not found");
+    }
+
+    return {
+      patient: updatedPatient,
+    };
+  }
+
+  public async delete(id: string) {
+    const patient = await PatientModel.findByIdAndUpdate(id, { reviewed: true });
+
+    if (!patient) {
+      throw CustomError.notFound("Patient not found");
+    }
+
+    return {
+      message: `Patient with id ${id} deleted successfully`,
+    }
+  }
+
+  private async saveFile(file: UploadedFile, folderPath: FolderPath) {
     try {
       const fileExtension = file.mimetype.split("/").at(1);
-      const destination = path.resolve(__dirname, "../uploads", folderPath);
-      this.checkFolder(destination);
+      this.checkFolder({ folderPath: FolderPath.PERSONAL_PHOTOS });
 
       const fileName = `${uuidv4()}.${fileExtension}`;
 
-      await file.mv(destination + `/${fileName}`);
+      await file.mv(
+        path.resolve(__dirname, `../uploads/${folderPath}`, fileName)
+      );
 
       return fileName;
     } catch (error) {
@@ -81,15 +149,27 @@ export class PatientService {
     }
   }
 
-  private checkFolder(folderPath: string) {
-    if (!fs.existsSync(folderPath)) {
-      fs.mkdirSync(folderPath);
+  private checkFolder({ folderPath }: { folderPath: FolderPath }) {
+    if (!fs.existsSync(path.resolve(__dirname, `../uploads/${folderPath}`))) {
+      fs.mkdirSync(path.resolve(__dirname, `../uploads/${folderPath}`));
     }
   }
 
-  private deleteFile(filePath: string) {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+  private deleteFile({
+    folderPath,
+    fileName,
+  }: {
+    folderPath: FolderPath;
+    fileName: string;
+  }) {
+    if (
+      fs.existsSync(
+        path.resolve(__dirname, `../uploads/${folderPath}`, fileName)
+      )
+    ) {
+      fs.unlinkSync(
+        path.resolve(__dirname, `../uploads/${folderPath}`, fileName)
+      );
     }
   }
 }
