@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import { PatientEntity } from "../../patients/entities/patient.entity";
 
 const PatientSchema = new Schema({
     rut: {
