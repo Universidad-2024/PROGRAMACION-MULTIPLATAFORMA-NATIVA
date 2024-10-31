@@ -3,20 +3,19 @@ import {
     Route,
     Routes,
 } from "react-router-dom";
-import { Home } from "../pages";
+import { CreatePatient, Home, PatientList, UpdatePatient } from "../pages";
+import { MainLayout } from "@/layouts";
 
 export const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" Component={Home} />
-                <Route />
-                <Route />
-                <Route />
-                <Route />
-                <Route />
-                <Route />
-                <Route />
+                <Route element={<MainLayout />}>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/paciente/nuevo" element={<CreatePatient />} />
+                    <Route path="/paciente/lista" element={<PatientList />} />
+                    <Route path="/paciente/actualizar/:id" element={<UpdatePatient />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     )
