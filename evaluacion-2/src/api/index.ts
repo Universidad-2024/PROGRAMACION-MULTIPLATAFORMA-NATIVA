@@ -9,6 +9,7 @@ const api_url = `${VITE_BACKEND_URL}/patients`;
 interface Api {
     get: () => Promise<Patients>;
     getOne: (id: string) => Promise<Patient>;
+    search: (search: string) => Promise<Patient[]>;
     create: (data: any) => Promise<Patient>;
     update: (id: string, data: any) => Promise<Patient>;
     delete: (id: string) => Promise<Patient>;
@@ -30,6 +31,10 @@ export const api:Api = {
         const data = await response.json() as { patient: Patient };
 
         return data.patient;
+    },
+    search: async (search: string) => {
+        const response = await fetch(`${api_url}/search?search=${search}`);
+        return response.json();
     },
     create: async (data: any) => {
         const response = await fetch(api_url, {

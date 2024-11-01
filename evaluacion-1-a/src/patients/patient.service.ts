@@ -37,21 +37,18 @@ export class PatientService {
     }
 
     const isDate = !isNaN(new Date(search).getTime());
+    const isAge = !isNaN(parseInt(search.toString()));
     const patients = await PatientModel.find({
       $or: [
         { admission_date: isDate ? new Date(search) : undefined },
+        { name : { $regex: search, $options: "i" } },
+        { age: isAge ? parseInt(search.toString()) : undefined },
         { disease: { $regex: search, $options: "i" } },
         { gender: { $regex: search, $options: "i" } },
       ],
     });
 
-    if (patients.length === 0) {
-      throw CustomError.notFound("Patients not found");
-    }
-
-    return {
-      patients: patients,
-    };
+    return patients;
   }
 
   public async create(patientDto: CreatePatientDto) {

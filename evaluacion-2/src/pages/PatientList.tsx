@@ -1,4 +1,5 @@
 import { api } from "@/api"
+import { List } from "@/components/patient/List"
 import { Button } from "@/components/ui/button"
 import {
   Table,
@@ -39,45 +40,8 @@ export const PatientList = () => {
 
       <h1 className="text-2xl font-semibold p-7">Lista de Pacientes</h1>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {columns.map((column) => (
-              <TableHead key={column.name}>{column.name}</TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {
-            loading ? (
-              <TableRow>
-                <TableCell colSpan={columns.length} className="text-center">Cargando...</TableCell>
-              </TableRow>
-            ) : (
-              patients.map((patient) => (
-                <TableRow key={patient._id}>
-                  <TableCell>
-                    <img src={patient.personal_photo || 'https://via.placeholder.com/150'} alt={patient.name} className="w-12 h-12 rounded-full" />
-                  </TableCell>
-                  <TableCell>{patient.name}</TableCell>
-                  <TableCell className="flex gap-2">
-                    <Button asChild variant="ghost" size="icon" title="Ver">
-                      <Link to={`/paciente/detalle/${patient._id}`}>
-                        <Eye />
-                      </Link>
-                    </Button>
-                    <Button asChild variant="ghost" size="icon" title="Editar">
-                      <Link to={`/paciente/actualizar/${patient._id}`}>
-                        <UserRoundPen />
-                      </Link>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )
-          }
-        </TableBody>
-      </Table>
+      <List patients={patients} loading={loading} />
+
     </div>
 
   )

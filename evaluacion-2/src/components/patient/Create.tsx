@@ -31,9 +31,11 @@ export enum Gender {
 }
 
 export const formSchema = z.object({
-    rut: z.string().regex(/^[0-9]{7,8}-[0-9Kk]$/, {
-        message: 'Rut inválido (12345678-9)',
-    }),
+    rut: z.string()
+        .transform(value => value.replace(/\./g, '')) // Eliminar puntos
+        .refine(value => /^[0-9]{7,8}-[0-9Kk]$/.test(value), {
+            message: 'Rut inválido (12345678-9)',
+        }),
     name: z.string().min(3, {
         message: 'Mínimo 3 caracteres',
     }),
