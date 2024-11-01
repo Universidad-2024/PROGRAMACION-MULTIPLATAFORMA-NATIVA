@@ -1,4 +1,4 @@
-import { Home, UserPlus, Users, UsersRound } from "lucide-react"
+import { Home, UserPlus, UsersRound } from "lucide-react"
 import { Link, useLocation } from "react-router-dom"
 
 const navItems = [

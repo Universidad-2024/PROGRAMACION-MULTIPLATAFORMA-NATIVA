@@ -62,7 +62,7 @@ export const PatientList = () => {
                   <TableCell>{patient.name}</TableCell>
                   <TableCell className="flex gap-2">
                     <Button asChild variant="ghost" size="icon" title="Ver">
-                      <Link to={`/patients/${patient._id}`}>
+                      <Link to={`/paciente/detalle/${patient._id}`}>
                         <Eye />
                       </Link>
                     </Button>

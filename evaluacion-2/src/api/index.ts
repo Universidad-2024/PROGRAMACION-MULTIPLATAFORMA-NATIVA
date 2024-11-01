@@ -11,6 +11,7 @@ interface Api {
     getOne: (id: string) => Promise<Patient>;
     create: (data: any) => Promise<Patient>;
     update: (id: string, data: any) => Promise<Patient>;
+    delete: (id: string) => Promise<Patient>;
 }
 
 
@@ -47,6 +48,12 @@ export const api:Api = {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(data),
+        });
+        return response.json()
+    },
+    delete: async (id: string) => {
+        const response = await fetch(`${api_url}/${id}`, {
+            method: 'DELETE',
         });
         return response.json()
     },

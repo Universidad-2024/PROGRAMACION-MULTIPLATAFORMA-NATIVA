@@ -13,5 +13,5 @@ export interface Patient {
     personal_photo: null;
     disease:        string;
     reviewed:       boolean;
-    admission_date: Date;
+    admission_date: string;
 }
