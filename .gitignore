@@ -10,9 +10,6 @@ yarn-error.log*
 *.tsbuildinfo
 tsconfig.tsbuildinfo
 
-# Environment variables
-.env
-
 # Logs
 logs/
 *.log
