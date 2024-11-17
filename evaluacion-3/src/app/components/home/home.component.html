@@ -1,0 +1,41 @@
+<div class="p-6 bg-gray-100 min-h-screen">
+    <h1 class="text-3xl font-bold text-center mb-6">Bienvenido al Sistema de Gestión de Pacientes</h1>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <h2 class="text-xl font-semibold mb-4">Últimos Pacientes Registrados</h2>
+        <ul>
+          <li 
+            *ngFor="let paciente of ultimosPacientes" 
+            class="flex justify-between items-center py-2 border-b last:border-0"
+          >
+            <span>{{ paciente.nombre }} {{ paciente.apellido }}</span>
+            <span class="text-gray-500 text-sm">{{ paciente.fechaIngreso | date:'shortDate' }}</span>
+          </li>
+        </ul>
+      </div>
+  
+      <div class="bg-white shadow-md rounded-lg p-4">
+        <h2 class="text-xl font-semibold mb-4">Estadísticas Generales</h2>
+        <ul class="space-y-2">
+          <li class="flex justify-between items-center">
+            <span>Total de Pacientes:</span>
+            <span class="font-bold">{{ totalPacientes }}</span>
+          </li>
+          <li class="flex justify-between items-center">
+            <span>Pacientes Revisados:</span>
+            <span class="font-bold">{{ pacientesRevisados }}</span>
+          </li>
+          <li class="flex justify-between items-center">
+            <span>Pacientes Hombres:</span>
+            <span class="font-bold">{{ hombres }}</span>
+          </li>
+          <li class="flex justify-between items-center">
+            <span>Pacientes Mujeres:</span>
+            <span class="font-bold">{{ mujeres }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  

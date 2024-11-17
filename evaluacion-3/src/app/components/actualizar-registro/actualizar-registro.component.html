@@ -1,0 +1,36 @@
+<div class="p-4">
+    <h2 class="text-2xl font-bold mb-5">Actualizar Paciente</h2>
+    <form [formGroup]="pacienteForm" (ngSubmit)="actualizarPaciente()">
+      <label>RUT:</label>
+      <input type="text" formControlName="rut" required>
+      <div *ngIf="pacienteForm.get('rut')?.invalid && (pacienteForm.get('rut')?.dirty || pacienteForm.get('rut')?.touched)" class="text-red-500">
+        <div *ngIf="pacienteForm.get('rut')?.errors?.['pattern']">Formato de RUT inválido. Debe ser XXXXXXXX-X.</div>
+      </div>
+      
+      <label>Nombre:</label>
+      <input type="text" formControlName="name" required>
+      <div *ngIf="pacienteForm.get('name')?.invalid && (pacienteForm.get('name')?.dirty || pacienteForm.get('name')?.touched)" class="text-red-500">
+        <div *ngIf="pacienteForm.get('name')?.errors?.['required']">El nombre es requerido.</div>
+      </div>
+      
+      <label>Edad:</label>
+      <input type="number" formControlName="age" required>
+      <div *ngIf="pacienteForm.get('age')?.invalid && (pacienteForm.get('age')?.dirty || pacienteForm.get('age')?.touched)" class="text-red-500">
+        <div *ngIf="pacienteForm.get('age')?.errors?.['required']">La edad es requerida.</div>
+      </div>
+  
+      <label>Sexo:</label>
+      <select formControlName="gender" required>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+      </select>
+  
+      <label>Enfermedad:</label>
+      <input type="text" formControlName="disease" required>
+      <div *ngIf="pacienteForm.get('disease')?.invalid && (pacienteForm.get('disease')?.dirty || pacienteForm.get('disease')?.touched)" class="text-red-500">
+        <div *ngIf="pacienteForm.get('disease')?.errors?.['required']">La enfermedad es requerida.</div>
+      </div>
+      
+      <button type="submit" [disabled]="pacienteForm.invalid">Actualizar Paciente</button>
+    </form>
+  </div>

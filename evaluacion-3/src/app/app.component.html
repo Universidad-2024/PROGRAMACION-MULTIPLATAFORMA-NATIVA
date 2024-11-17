@@ -1,0 +1,12 @@
+<nav class="bg-blue-600 p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="/" class="text-white text-lg font-bold">Hospital El Alerce</a>
+      <div class="flex space-x-4">
+        <a routerLink="home" class="text-white hover:text-blue-300 cursor-pointer">Home</a>
+        <a routerLink="/registro/nuevo" routerLinkActive="active" ariaCurrentWhenActive="page" class="text-white hover:text-blue-300 cursor-pointer">Nuevo Registro</a>
+        <a routerLink="/registro/listar" class="text-white hover:text-blue-300 cursor-pointer">Listar Registros</a>
+        <a routerLink="/registro/busqueda/search" class="text-white hover:text-blue-300 cursor-pointer">Buscar Registro</a>
+      </div>
+    </div>
+  </nav>
+<router-outlet />

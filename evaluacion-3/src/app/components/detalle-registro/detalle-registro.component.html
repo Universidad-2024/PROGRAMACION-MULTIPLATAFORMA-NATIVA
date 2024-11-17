@@ -1,0 +1,18 @@
+<div *ngIf="paciente" class="p-4">
+    <h2 class="text-2xl font-bold mb-5">Detalle del Paciente</h2>
+    <div class="flex gap-3 items-center">
+      <img [src]="paciente.personal_photo" alt="Foto de {{ paciente.nombre }}" class="">
+      <div>
+        <h3 class="text-xl">{{ paciente.nombre }}</h3>
+        <p>RUT: {{ paciente.rut }}</p>
+        <p>Edad: {{ paciente.edad }}</p>
+        <p>Sexo: {{ paciente.sexo }}</p>
+        <p>Enfermedad: {{ paciente.enfermedad }}</p>
+        <p>Fecha de Ingreso: {{ paciente.fechaIngreso | date }}</p>
+      </div>
+    </div>
+    <div class="mt-4 space-x-4">
+      <a [routerLink]="['/registro/actualizar/', paciente.id]" class="text-blue-500">Actualizar</a>
+      <button (click)="eliminarPaciente()" class="">Eliminar</button>
+    </div>
+  </div>
