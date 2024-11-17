@@ -28,7 +28,6 @@ export class DetalleRegistroComponent implements OnInit {
     if (id) {
       this.pacienteService.getPaciente(id).subscribe(
         (data: Paciente) => {
-          console.log(data);
           this.paciente = {
             personal_photo: data.patient.personal_photo ?? 'https://via.placeholder.com/150',
             id: data.patient._id,
@@ -38,6 +37,7 @@ export class DetalleRegistroComponent implements OnInit {
             sexo: data.patient.gender,
             enfermedad: data.patient.disease,
             fechaIngreso: data.patient.admission_date,
+            revisado: data.patient.reviewed
           };
         },
         error => {

@@ -9,10 +9,14 @@
         <p>Sexo: {{ paciente.sexo }}</p>
         <p>Enfermedad: {{ paciente.enfermedad }}</p>
         <p>Fecha de Ingreso: {{ paciente.fechaIngreso | date }}</p>
+        <p>Revisado: {{ paciente.revisado ? 'Sí' : 'No' }}</p>
       </div>
     </div>
     <div class="mt-4 space-x-4">
       <a [routerLink]="['/registro/actualizar/', paciente.id]" class="text-blue-500">Actualizar</a>
-      <button (click)="eliminarPaciente()" class="">Eliminar</button>
+      <button 
+        [disabled]="paciente.revisado"
+        (click)="eliminarPaciente()"
+        >Eliminar</button>
     </div>
   </div>

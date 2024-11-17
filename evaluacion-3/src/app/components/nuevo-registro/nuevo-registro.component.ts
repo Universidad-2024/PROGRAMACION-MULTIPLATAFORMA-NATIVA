@@ -31,7 +31,7 @@ export class NuevoRegistroComponent {
       this.pacienteService.addPaciente(this.pacienteForm.value).subscribe({
         next: () => {
           alert('Paciente agregado correctamente');
-          this.router.navigate(['/listar-registros']);
+          this.router.navigate(['/registro/listar']);
         },
         error: () => alert('Error al agregar el paciente')
       });

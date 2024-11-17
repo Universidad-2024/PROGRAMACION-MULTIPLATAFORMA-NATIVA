@@ -53,7 +53,7 @@ export class ActualizarRegistroComponent {
       this.pacienteService.updatePaciente(this.paciente._id, this.pacienteForm.value).subscribe(
         () => {
           alert('Paciente actualizado correctamente');
-          this.router.navigate(['/listar-registros']);
+          this.router.navigate(['/registro/listar']);
         },
         error => {
           console.error('Error al actualizar el paciente:', error);
